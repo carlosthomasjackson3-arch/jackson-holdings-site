@@ -1,36 +1,587 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Jackson Holdings</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {
-font-family: Arial, sans-serif;
-background:#0f172a;
-color:white;
-text-align:center;
-padding:60px;
-}
-h1 {font-size:40px;}
-p {max-width:600px;margin:auto;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jackson Holdings</title>
+  <meta name="description" content="Jackson Holdings is a parent company overseeing Omega Waypoint and Longview Stewardship." />
+  <style>
+    :root {
+      --bg: #090d16;
+      --bg-soft: #101726;
+      --panel: rgba(255,255,255,0.04);
+      --panel-strong: rgba(255,255,255,0.07);
+      --border: rgba(255,255,255,0.12);
+      --text: #f5f7fb;
+      --muted: #b4bccd;
+      --gold: #c9a45c;
+      --gold-soft: rgba(201,164,92,0.14);
+      --max: 1180px;
+      --radius: 22px;
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top center, rgba(201,164,92,0.18), transparent 30%),
+        linear-gradient(180deg, #09101c 0%, #090d16 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      background: rgba(9,13,22,0.78);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #d4b06b, #b88b39);
+      color: #0b0f17;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      box-shadow: 0 8px 24px rgba(201,164,92,0.28);
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 15px;
+      letter-spacing: 0.03em;
+    }
+
+    .brand-text span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav a:hover { color: var(--text); }
+
+    .hero {
+      padding: 78px 0 58px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin: 18px 0 18px;
+      font-size: clamp(2.5rem, 6vw, 4.8rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 760px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+      font-weight: 600;
+      transition: 0.18s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(180deg, #d4b06b, #b88b39);
+      color: #0b0f17;
+      box-shadow: 0 12px 28px rgba(201,164,92,0.2);
+    }
+
+    .btn-secondary {
+      border-color: var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .hero-side {
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .mini-company {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .mini-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(201,164,92,0.16);
+      border: 1px solid rgba(201,164,92,0.3);
+      color: #e3c583;
+      font-weight: 800;
+    }
+
+    .mini-company h3 {
+      margin-bottom: 2px;
+      font-size: 20px;
+    }
+
+    .mini-company span,
+    .section-copy,
+    .muted {
+      color: var(--muted);
+    }
+
+    section.block {
+      padding: 26px 0 0;
+    }
+
+    .section-head {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-kicker {
+      color: #dfbf7c;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 12px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.9rem, 3vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 0;
+    }
+
+    .structure-grid,
+    .companies-grid,
+    .vision-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .structure-wrap {
+      padding: 26px;
+      text-align: center;
+    }
+
+    .tree-parent,
+    .tree-child {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--panel);
+      padding: 20px;
+    }
+
+    .tree-parent {
+      max-width: 280px;
+      margin: 0 auto 18px;
+      background: var(--panel-strong);
+    }
+
+    .tree-line {
+      width: 2px;
+      height: 26px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.15);
+    }
+
+    .tree-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .companies-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .company-card .top {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .company-card h3 {
+      margin-bottom: 2px;
+      font-size: 24px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #dfbf7c;
+    }
+
+    .vision-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .vision-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .vision-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 38px;
+      background: linear-gradient(180deg, #d4b06b, #b88b39);
+      color: #0b0f17;
+      font-weight: 700;
+    }
+
+    .contact-card {
+      padding: 30px;
+      margin: 26px 0 44px;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+      color: var(--muted);
+    }
+
+    .site-footer {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      color: #8d96a8;
+      font-size: 14px;
+      padding: 24px 0 36px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid,
+      .companies-grid,
+      .vision-grid,
+      .tree-row {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 50px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header-inner {
+        padding: 14px 0;
+      }
+
+      .container {
+        width: min(var(--max), calc(100% - 22px));
+      }
+
+      .card,
+      .contact-card,
+      .structure-wrap {
+        padding: 20px;
+      }
+
+      .hero-copy {
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#top" class="brand">
+        <div class="brand-mark">JH</div>
+        <div class="brand-text">
+          <strong>Jackson Holdings</strong>
+          <span>Holding Company</span>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="#about">About</a>
+        <a href="#structure">Structure</a>
+        <a href="#companies">Companies</a>
+        <a href="#network">Longview</a>
+        <a href="#vision">Vision</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
 
-<h1>Jackson Holdings</h1>
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Long-Term Business Development</div>
+          <h1>Building ownership, logistics, and entrepreneurial networks.</h1>
+          <p class="hero-copy">
+            Jackson Holdings is a parent company focused on building and overseeing operating businesses across commercial logistics, services, and entrepreneurial collaboration. Its structure is designed for disciplined growth, selective expansion, and long-term value creation.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#companies">Explore Companies</a>
+            <a class="btn btn-secondary" href="#contact">Business Inquiries</a>
+          </div>
+        </div>
 
-<p>
-Parent company overseeing Omega Waypoint and Longview Stewardship.
-</p>
+        <div class="hero-side">
+          <div class="card">
+            <div class="mini-company">
+              <div class="mini-logo">OW</div>
+              <div>
+                <h3>Omega Waypoint</h3>
+                <span>Commercial Logistics</span>
+                <p class="muted">Transportation coordination, freight movement, and scalable supply chain support for business clients.</p>
+              </div>
+            </div>
+          </div>
 
-<h2>Companies</h2>
+          <div class="card">
+            <div class="mini-company">
+              <div class="mini-logo">LS</div>
+              <div>
+                <h3>Longview Stewardship</h3>
+                <span>Entrepreneurial Network & Services</span>
+                <p class="muted">A private network connecting entrepreneurs, operators, and service providers through referrals, advisory, marketing, and collaboration.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<p><strong>Omega Waypoint</strong><br>
-Commercial logistics and transportation coordination.</p>
+    <section class="block" id="about">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">About</div>
+          <h2>A holding company built for ownership and expansion.</h2>
+          <p class="section-copy">
+            Jackson Holdings serves as the parent structure for ventures that can be developed, owned, and grown under one umbrella. The company is designed to support operational businesses today while creating room for future opportunities over time.
+          </p>
+        </div>
+      </div>
+    </section>
 
-<p><strong>Longview Stewardship</strong><br>
-Private entrepreneurial network connecting operators, entrepreneurs and collaborators.</p>
+    <section class="block" id="structure">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">Structure</div>
+          <h2>Company Structure</h2>
+        </div>
+        <div class="card structure-wrap">
+          <div class="tree-parent">
+            <strong>Jackson Holdings</strong><br />
+            <span class="muted">Parent Company</span>
+          </div>
+          <div class="tree-line"></div>
+          <div class="tree-row">
+            <div class="tree-child">
+              <strong>Omega Waypoint</strong><br />
+              <span class="muted">Commercial Logistics</span>
+            </div>
+            <div class="tree-child">
+              <strong>Longview Stewardship</strong><br />
+              <span class="muted">Entrepreneurial Network</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <section class="block" id="companies">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">Companies</div>
+          <h2>Current Operating Ventures</h2>
+        </div>
+        <div class="companies-grid">
+          <article class="card company-card">
+            <div class="top">
+              <div class="mini-logo">OW</div>
+              <div>
+                <h3>Omega Waypoint</h3>
+                <div class="tag">Commercial Logistics</div>
+              </div>
+            </div>
+            <p class="section-copy">
+              Omega Waypoint focuses on commercial logistics and transportation coordination, with an emphasis on Class A logistics, freight movement, and scalable supply chain support for business clients.
+            </p>
+          </article>
+
+          <article class="card company-card">
+            <div class="top">
+              <div class="mini-logo">LS</div>
+              <div>
+                <h3>Longview Stewardship</h3>
+                <div class="tag">Entrepreneurial Network & Services</div>
+              </div>
+            </div>
+            <p class="section-copy">
+              Longview Stewardship is a private entrepreneurial network built to connect people through referrals, advisory, marketing support, and strategic collaboration. It is structured to cultivate trusted relationships, create opportunities, and support future sponsorships and membership growth.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="network">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">Longview Stewardship</div>
+          <h2>A private network built around trusted collaboration.</h2>
+          <p class="section-copy">
+            Longview Stewardship is designed as a curated entrepreneurial ecosystem where business owners, service providers, and collaborators can build direct relationships, share referrals, and access opportunities within a more private membership environment.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="vision">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">Vision</div>
+          <h2>Built for long-term growth and selective expansion.</h2>
+        </div>
+        <div class="vision-grid">
+          <div class="card vision-item">
+            <div class="vision-num">1</div>
+            <div>Build durable companies under a single holding structure.</div>
+          </div>
+          <div class="card vision-item">
+            <div class="vision-num">2</div>
+            <div>Develop commercial logistics capability through Omega Waypoint.</div>
+          </div>
+          <div class="card vision-item">
+            <div class="vision-num">3</div>
+            <div>Cultivate a strong entrepreneurial network through Longview Stewardship.</div>
+          </div>
+          <div class="card vision-item">
+            <div class="vision-num">4</div>
+            <div>Create long-term value through ownership, relationships, and disciplined growth.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="contact">
+      <div class="container">
+        <div class="card contact-card">
+          <div class="section-kicker">Contact</div>
+          <h2>Business Inquiries</h2>
+          <p class="section-copy">
+            For partnership discussions, membership inquiries, advisory opportunities, or business conversations involving Jackson Holdings and its operating ventures.
+          </p>
+          <div class="contact-list">
+            <div>Email: contact@jacksonholdings.com</div>
+            <div>Companies: Omega Waypoint · Longview Stewardship</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© 2026 Jackson Holdings</div>
+      <div>Parent company of Omega Waypoint and Longview Stewardship</div>
+    </div>
+  </footer>
 </body>
 </html>
+
